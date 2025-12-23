@@ -21,3 +21,4 @@ make $BUILD_VAR temp_defconfig
 rm arch/arm64/configs/temp_defconfig
 
 make $BUILD_VAR
+make $BUILD_VAR dtbs
