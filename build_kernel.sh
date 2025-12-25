@@ -30,3 +30,8 @@ rm arch/arm64/configs/temp_defconfig
 
 make $BUILD_VAR
 make $BUILD_VAR dtbs
+
+DTBO_FILES=$(find $(pwd)/out/arch/arm64/boot/dts/samsung/ -name sm*150-sec-$DEVICE-eur-overlay-*.dtbo)
+$(pwd)/tools/mkdtimg create $(pwd)/out/dtbo.img --page_size=4096 ${DTBO_FILES}
+
+mv $(pwd)/out/dtbo.img ../dtbo.img

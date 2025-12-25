@@ -74,3 +74,4 @@ jobs:
           name: "ParadigmKernel-${{ env.RELEASE_TS }}"
           files: |
             boot.img
+            dtbo.img
