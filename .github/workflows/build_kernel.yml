@@ -56,11 +56,8 @@ jobs:
 
       - name: Build boot image
         run: |
-          mkdir bootimg && cd bootimg
-          mv ../build_boot.sh build_boot.sh
           chmod +x build_boot.sh
           bash build_boot.sh
-          cd ..
 
       - name: Generate release version
         id: ts

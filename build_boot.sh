@@ -1,13 +1,15 @@
 #/bin/sh
 
-APK_URL="$(curl -s "https://api.github.com/repos/topjohnwu/Magisk/releases/latest" | grep -oE 'https://[^\"]+\.apk' | grep app-debug)"
-wget -O "magisk.zip" "$APK_URL"
-unzip "magisk.zip" "lib/x86_64/libmagiskboot.so"
-sudo cp "lib/x86_64/libmagiskboot.so" "/usr/bin/magiskboot"
-sudo chmod +x "/usr/bin/magiskboot"
+MKBOOTIMG="$(pwd)/mkbootimg/mkbootimg.py"
+OUT_KERNEL="$(pwd)/kernel/out/arch/arm64/boot/Image"
+RAMDISK="$(pwd)/boot/ramdisk"
+MONTH="$(date +%Y-%m)"
 
-magiskboot unpack ../boot.img
-cp ../kernel/out/arch/arm64/boot/Image kernel
-cp ../kernel/out/arch/arm64/boot/dts/qcom/sdmmagpie.dtb dtb
-magiskboot repack ../boot.img boot-new.img
-mv boot-new.img ../boot.img
+$MKBOOTIMG \
+    --header_version 2 \
+    --kernel "$OUT_KERNEL" \
+    --output boot.img \
+    --ramdisk "$RAMDISK" \
+    --os_version 16.0.0 \
+    --os_patch_level "$MONTH"
+
