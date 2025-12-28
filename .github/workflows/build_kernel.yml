@@ -62,7 +62,13 @@ jobs:
         id: ts
         run: |
           echo "RELEASE_TS=$(date +'%Y%m%d-%H%M%S')" >> $GITHUB_ENV
-          echo "REL_VER=Kernel version: $(cat kernel/out/include/config/kernel.release)" >> $GITHUB_ENV
+          : > version.txt
+          echo "**Kernel version:** $(cat kernel/out/include/config/kernel.release)  " >> version.txt
+          echo >> version.txt
+          cd kernel
+          export KHASH="$(git rev-parse HEAD)"
+          cd ..
+          echo "**Kernel source:** [$KHASH](https://github.com/UN1CA/kernel_samsung_sm7150/tree/$KHASH)" >> version.txt
 
 
       # 3. Upload the generated boot.img
@@ -78,7 +84,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.TOKEN }}
         with:
-          body: "${{ env.REL_VER }}"
+          body_path: version.txt
           tag_name: "${{ env.RELEASE_TS }}"
           name: "ParadigmKernel-${{ env.RELEASE_TS }}"
           files: |
