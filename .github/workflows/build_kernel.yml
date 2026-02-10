@@ -20,13 +20,6 @@ jobs:
           submodules: true
           fetch-depth: 1
 
-      - name: Cleanup space
-        run: |
-          sudo apt-get remove --purge -y "php*" "dotnet*" "mysql*" "nodejs*" "clang*" "google*"
-          sudo apt-get autoremove -y
-          sudo apt-get clean
-          sudo rm -rf /usr/local
-
       - name: Install build tools
         run: |
           sudo apt-get install -y \
@@ -37,26 +30,12 @@ jobs:
             wget \
             zip
 
-      - name: Download prebuilt Google clang
-        run: |
-          cd kernel
-          wget -O llvm.tar.gz https://android.googlesource.com/platform/prebuilts/clang/host/linux-x86/+archive/refs/heads/main-kernel-2025/clang-r547379.tar.gz
-          mkdir llvm-20; cd llvm-20
-          tar xvzf ../llvm.tar.gz
-          rm ../llvm.tar.gz
-          cd ..
-
       # 2. Run your custom bash script
       - name: Build kernel
         run: |
-          chmod +x build_kernel.sh
-          bash build_kernel.sh
+          chmod +x build.sh
+          bash build.sh
           cd ..
-
-      - name: Build boot image
-        run: |
-          chmod +x build_boot.sh
-          bash build_boot.sh
 
       - name: Generate release version
         id: ts
